@@ -24,7 +24,6 @@ function handleLogin(event) {
 }
 
 function addToCart(item, price) {
-    let totalCost = 0;
     console.log(`Item:`, item); //Testing functionality with console
     console.log(`Price:`, price);
 
@@ -36,34 +35,65 @@ function addToCart(item, price) {
         };
         cart.push(objectToInsert);
     } else {
+        let itemExists = false;
         for (let index = 0; index < cart.length; index++) {
             if (cart[index].drink === item) {
                 cart[index].quanity++;
-            } else {
-                const objectToInsert = {
-                    drink: item,
-                    cost: price,
-                    quanity: 1,
-                };
-                cart.push(objectToInsert);
+                itemExists = true;
+                break;
             }
         }
+        if (!itemExists) {
+            const objectToInsert = {
+                drink: item,
+                cost: price,
+                quanity: 1,
+            };
+            cart.push(objectToInsert);
+        }
     }
+    updateCart();
+}
 
+function updateCart() {
+    let totalCost = 0;
     let ulElement = document.getElementById("cart-items");
-    let liElement = document.createElement("li");
+    ulElement.innerHTML = "";
 
     for (let index = 0; index < cart.length; index++) {
         console.log(`addedCartItem`, cart[index]);
 
-        totalCost += cart[index].cost;
+        totalCost += cart[index].cost * cart[index].quantity;
+        const liElement = document.createElement("li");
 
-        liElement.innerText = `Item: ${cart[index].drink}, Price: $${cart[
-            index
-        ].cost.toFixed(2)}`;
+        liElement.innerHTML = `
+            Item: ${cart[index].drink}, Price: $${cart[index].cost.toFixed(
+            2
+        )}, Quantity: ${cart[index].quantity}
+            <button onclick="removeFromCart(${index})">Remove</button>
+        `;
         ulElement.appendChild(liElement);
     }
-
     let totalElement = document.getElementById("total");
     totalElement.innerText = totalCost.toFixed(2);
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCart();
+}
+function checkout() {
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+    alert(
+        `Thank you for your purchase, ${
+            loggedInUser && loggedInUser.username
+                ? loggedInUser.username
+                : "Human"
+        }!`
+    );
+    cart.length = 0;
+    updateCart();
 }
