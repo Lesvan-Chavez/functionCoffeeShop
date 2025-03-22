@@ -10,12 +10,6 @@
     <!-- Header Section -->
     <header>
         <h1>☕ Coffee Shop</h1>
-        <!-- <div id="login-section">
-            <input type="text" id="username" placeholder="Username" />
-            <input type="password" id="password" placeholder="Password" />
-            <button onclick="handleLogin()">Login</button>
-            <span id="welcome-message"></span>
-        </div> -->
         <form id="login-form" onsubmit="handleLogin(event)">
             <input type="text" id="username" placeholder="Username" required />
             <input type="password" id="password" placeholder="Password" required />
@@ -23,6 +17,12 @@
             <span id="welcome-message"></span>
         </form>
     </header>
+    <nav>
+        <h1>Theme Selector</h1>
+        <button class="btn light" onclick="changeTheme('light')">Light Theme</button>
+        <button class="btn dark" onclick="changeTheme('dark')">Dark Theme</button>
+        <button class="btn blue" onclick="changeTheme('blue')">Blue Theme</button>
+    </nav>
     <main>
         <!-- Menu Section -->
         <section id="menu">

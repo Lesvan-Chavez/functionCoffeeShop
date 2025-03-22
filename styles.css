@@ -81,3 +81,15 @@ button:hover {
 #total {
     font-weight: bold;
 }
+
+.btn {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+.light { background-color: #f0f0f0; color: rgb(73, 73, 73); }
+.dark { background-color: rgb(73, 73, 73); color: white; }
+.blue { background-color: rgb(33, 151, 194); color: white; }
