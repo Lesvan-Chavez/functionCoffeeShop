@@ -8,7 +8,6 @@ function handleLogin(event) {
     event.preventDefault();
     const usernameElement = document.getElementById("username").value;
     const passwordElement = document.getElementById("password").value;
-
     if (
         user.username !== usernameElement ||
         user.password !== passwordElement
@@ -24,21 +23,21 @@ function handleLogin(event) {
 }
 
 function addToCart(item, price) {
-    console.log(`Item:`, item); //Testing functionality with console
-    console.log(`Price:`, price);
+    // console.log(`Item:`, item); //Testing functionality with console
+    // console.log(`Price:`, price);
 
     if (cart.length === 0) {
         const objectToInsert = {
             drink: item,
             cost: price,
-            quanity: 1,
+            quantity: 1,
         };
         cart.push(objectToInsert);
     } else {
         let itemExists = false;
         for (let index = 0; index < cart.length; index++) {
             if (cart[index].drink === item) {
-                cart[index].quanity++;
+                cart[index].quantity++;
                 itemExists = true;
                 break;
             }
@@ -47,7 +46,7 @@ function addToCart(item, price) {
             const objectToInsert = {
                 drink: item,
                 cost: price,
-                quanity: 1,
+                quantity: 1,
             };
             cart.push(objectToInsert);
         }
