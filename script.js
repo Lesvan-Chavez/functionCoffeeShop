@@ -1,8 +1,8 @@
 const user = { username: "admin", password: "password123" };
 
 let loggedInUser = null;
-
 const cart = [];
+let appliedDiscount = 0;
 
 // login function:
 
@@ -81,7 +81,7 @@ function updateCart() {
     }
 
     if (appliedDiscount > 0) {
-        totalCost -= (totalCost * (appliedDiscount / 100));
+        totalCost -= totalCost * (appliedDiscount / 100);
     }
 
     let totalElement = document.getElementById("total");
@@ -136,37 +136,29 @@ const promoCodes = {
     "50OFF": 50,
 };
 
-let appliedDiscount = 0; 
 function applyPromoCode() {
-    const userCode = document.getElementById("promoCodeInput").value.toUpperCase();
+    const userCode = document
+        .getElementById("promoCodeInput")
+        .value.toUpperCase();
     const messageElement = document.getElementById("message");
     let totalElement = document.getElementById("total");
     let currentTotal = parseFloat(totalElement.innerText); // Get current total as a number
 
-
     if (promoCodes[userCode]) {
-        let discount = promoCodes[userCode]; 
+        let discount = promoCodes[userCode];
         appliedDiscount = discount; // Store discount for future cart updates for update function
 
-        let newTotal = currentTotal - (currentTotal * (discount / 100)); 
-        totalElement.innerText = newTotal.toFixed(2); 
+        let newTotal = currentTotal - currentTotal * (discount / 100);
+        totalElement.innerText = newTotal.toFixed(2);
 
-        
         updateCart();
         messageElement.textContent = `Success! ${discount}% off applied!`;
         messageElement.style.color = "green";
-
     } else {
         messageElement.textContent = "Invalid promo code. Try again!";
         messageElement.style.color = "red";
     }
 }
-
-
-
-
-
-
 
 // practicing switch cases, Dark and Blue theme need work 3/22/25
 
