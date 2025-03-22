@@ -4,6 +4,8 @@ let loggedInUser = null;
 
 const cart = [];
 
+// login function:
+
 function handleLogin(event) {
     event.preventDefault();
     const usernameElement = document.getElementById("username").value;
@@ -21,6 +23,8 @@ function handleLogin(event) {
     let welcomeMessageElement = document.getElementById("welcome-message");
     welcomeMessageElement.innerText = `Welcome ${loggedInUser.username}`;
 }
+
+// adding items to cart function
 
 function addToCart(item, price) {
     // console.log(`Item:`, item); //Testing functionality with console
@@ -54,6 +58,8 @@ function addToCart(item, price) {
     updateCart();
 }
 
+// updating the cart
+
 function updateCart() {
     let totalCost = 0;
     let ulElement = document.getElementById("cart-items");
@@ -69,13 +75,20 @@ function updateCart() {
             Item: ${cart[index].drink}, Price: $${cart[index].cost.toFixed(
             2
         )}, Quantity: ${cart[index].quantity}
-            <button onclick="removeFromCart(${index})">Remove</button>
+            <button onclick="minusQuantity(${index})">-</button><button onclick="addQuantity(${index})">+</button><button onclick="removeFromCart(${index})">Remove</button>
         `;
         ulElement.appendChild(liElement);
     }
+
+    if (appliedDiscount > 0) {
+        totalCost -= (totalCost * (appliedDiscount / 100));
+    }
+
     let totalElement = document.getElementById("total");
     totalElement.innerText = totalCost.toFixed(2);
 }
+
+// removing item from cart
 
 function removeFromCart(index) {
     cart.splice(index, 1);
@@ -96,6 +109,66 @@ function checkout() {
     cart.length = 0;
     updateCart();
 }
+
+// increase or decrease item of the cart instead of completly removing
+
+function addQuantity(index) {
+    cart[index].quantity++;
+    updateCart();
+}
+
+// validation to ensure it doesnt go pass 0
+function minusQuantity(index) {
+    if (cart[index].quantity === 1) {
+        removeFromCart(index);
+    } else {
+        cart[index].quantity--;
+        updateCart();
+    }
+}
+
+// adding a discount code
+// check if discount code is valid & apply it to cart
+
+const promoCodes = {
+    "10OFF": 10,
+    "20OFF": 20,
+    "50OFF": 50,
+};
+
+let appliedDiscount = 0; 
+function applyPromoCode() {
+    const userCode = document.getElementById("promoCodeInput").value.toUpperCase();
+    const messageElement = document.getElementById("message");
+    let totalElement = document.getElementById("total");
+    let currentTotal = parseFloat(totalElement.innerText); // Get current total as a number
+
+
+    if (promoCodes[userCode]) {
+        let discount = promoCodes[userCode]; 
+        appliedDiscount = discount; // Store discount for future cart updates for update function
+
+        let newTotal = currentTotal - (currentTotal * (discount / 100)); 
+        totalElement.innerText = newTotal.toFixed(2); 
+
+        
+        updateCart();
+        messageElement.textContent = `Success! ${discount}% off applied!`;
+        messageElement.style.color = "green";
+
+    } else {
+        messageElement.textContent = "Invalid promo code. Try again!";
+        messageElement.style.color = "red";
+    }
+}
+
+
+
+
+
+
+
+// practicing switch cases, Dark and Blue theme need work 3/22/25
 
 function changeTheme(theme) {
     switch (theme) {
