@@ -5,7 +5,6 @@ const cart = [];
 let appliedDiscount = 0;
 
 // login function:
-
 function handleLogin(event) {
     event.preventDefault();
     const usernameElement = document.getElementById("username").value;
@@ -26,35 +25,47 @@ function handleLogin(event) {
 
 // adding items to cart function
 
-function addToCart(item, price) {
-    // console.log(`Item:`, item); //Testing functionality with console
-    // console.log(`Price:`, price);
+function addToCart(name, price) {
+    // console.log("item in addToCart", name, price);
 
+    price = parseFloat(price);
+
+    // If the cart is empty, add the first item directly
     if (cart.length === 0) {
         const objectToInsert = {
-            drink: item,
+            drink: name,
             cost: price,
             quantity: 1,
         };
         cart.push(objectToInsert);
-    } else {
+    }
+    // if cart is not empty, we need to check if the passed in item exists
+    else {
+        // you will see booleans created like this pretty often. it's typically called a flag.
         let itemExists = false;
+
+        // check if item already exists in cart. if it is then increase the quantity and set the flag to true
+        // you will notice 'break'.  this is a keyword in javascript.  it breaks out of the loop.  it is used here to break out as soon if the item is found since there is no need to keep going. unlike return, which would exit the entire function, break just exits the loop
         for (let index = 0; index < cart.length; index++) {
-            if (cart[index].drink === item) {
+            if (cart[index].drink === name) {
                 cart[index].quantity++;
                 itemExists = true;
                 break;
             }
         }
+
+        // if there are items in the cart, but this item does not exist, add it to the cart
         if (!itemExists) {
             const objectToInsert = {
-                drink: item,
+                drink: name,
                 cost: price,
                 quantity: 1,
             };
             cart.push(objectToInsert);
         }
     }
+
+    // call (invoke) the updateCart() function.  we orginally had the updateCart() code in the addToCart() function, but it is more readable to separate it out.
     updateCart();
 }
 
@@ -66,7 +77,7 @@ function updateCart() {
     ulElement.innerHTML = "";
 
     for (let index = 0; index < cart.length; index++) {
-        console.log(`addedCartItem`, cart[index]);
+        // console.log(`addedCartItem`, cart[index]);
 
         totalCost += cart[index].cost * cart[index].quantity;
         const liElement = document.createElement("li");
@@ -180,3 +191,48 @@ function changeTheme(theme) {
             alert("Invalid theme selected!");
     }
 }
+
+// need to add weather API that recs bev based off the temp
+// 4/5/25 okcoders yt vid^
+
+function createMenu(menu) {
+    let ulElement = document.getElementById("menu");
+    ulElement.style.listStyleType = "none";
+    if (menu && menu.length > 0) {
+        for (let i = 0; i < menu.length; i++) {
+            const liElement = document.createElement("li");
+            liElement.innerHTML = `
+            <div class="menu-item">
+            <span id="${menu[i].name}">${menu[i].name}</span>
+            <button onclick="addToCart('${menu[i].name}', '${menu[i].price}')">Add To Cart ($${menu[i].price.toFixed(2)})</button>
+
+            </div>`;
+            ulElement.appendChild(liElement);
+        }
+    }
+}
+
+// function practiceGetRoute () {
+//     // console.log("I am in practiceGetRoute()");
+//     const response = fetch('http://localhost:3000');
+//     console.log('response', response);
+// };
+
+async function getMenuFromServer() {
+    const responseMenu = await fetch("http://localhost:3000/getMenu");
+    // console.log("menuFetch", responseMenu);
+    if (responseMenu.status != 200) {
+        console.error("response error");
+        return;
+    }
+    let data = await responseMenu.json();
+    console.log("menuData", data);
+
+    createMenu(data);
+}
+
+// this function needs to add createMenu() and getUserLocation() from the weather API
+document.addEventListener("DOMContentLoaded", function () {
+    // practiceGetRoute();
+    getMenuFromServer();
+});
