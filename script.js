@@ -1,14 +1,26 @@
-const user = { username: "admin", password: "password123" };
-
 let loggedInUser = null;
 const cart = [];
 let appliedDiscount = 0;
 
 // login function:
-function handleLogin(event) {
+async function handleLogin(event) {
     event.preventDefault();
     const usernameElement = document.getElementById("username").value;
     const passwordElement = document.getElementById("password").value;
+    console.log("username", username.value);
+    console.log("password", password.value);
+    const response = await fetch('http://localhost:3000/login', 
+    {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/json" },
+        body: JSON.stringify({
+        username: username.value,
+        password: password.value
+        })
+    });
+
+
     if (
         user.username !== usernameElement ||
         user.password !== passwordElement
