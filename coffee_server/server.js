@@ -28,13 +28,21 @@ app.get("/", (req, res) => {
 });
 
 app.get("/getMenu", (req, res) => {
-    console.log("gn2 / menu");
+    console.log("gn2 / menu"); 
     //rech out to the db to get the menu
     res.json(menu);
 });
 
 app.post("/login", (req, res) => {
     console.log("gn2 / login", req.body);
+    const username = req.body.username;
+    const password = req.body.password;
+    if (username != user.username || password != user.password) { // not fully working get GPT to help
+        res.statusCode(401).json({ message: "Not Authorized"});
+    } 
+    
 });
 
-app.listen(3000);
+app.listen(3000, () => {
+    console.log('Server is on port 3000')
+});
