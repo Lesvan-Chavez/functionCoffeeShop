@@ -9,7 +9,7 @@ async function handleLogin(event) {
     const username = usernameElement.value;
     const passwordElement = document.getElementById('password');
     const password = passwordElement.value;
-    
+ 
     const response = await fetch('http://localhost:3000/login', 
     {
         method: "POST",
@@ -20,6 +20,7 @@ async function handleLogin(event) {
         password: password
         })
     });
+    
     
     if (!response.ok) {
         alert('invalid credentials');

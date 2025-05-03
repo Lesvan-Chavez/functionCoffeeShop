@@ -1,5 +1,8 @@
 const express = require("express");
 const cors = require("cors");
+const { v4: uuidv4 } = require('uuid');
+require('dotenv').config();
+const supabase = require('./db');
 
 const menu = [
     {
@@ -46,17 +49,32 @@ const path = require("path");
 app.use(express.static(path.join(__dirname, "public")));
 
 // Login 
+// Login: okcoders@okcoders.com Password: okcoders.com
 
-const user = { username: "admin", password: "password123" };
-
-app.post("/login", (req, res) => {
-    console.log("gn2 / login", req.body);
-    const {username, password} = req.body;
-    if (username !== user.username || password !== user.password) {
-    res.status(401).json({ message: "Not Authorized" });
+app.post('/login', async (req, res) => {
+    console.log('gn2 /login', req.body)
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: req.body.username,
+        password: req.body.password
+    });
+    if (error) {
+        console.error('Signin error', error);
+        return res.status(401).json({ error: error.message });
     }
-    res.status(200).json({message: "Login successful", menu: menu});
+    res.status(200).json({message: 'Success'})
 });
+
+// Original local host login authentecation 
+// const user = { username: "admin", password: "password123" };
+// app.post("/login", async (req, res) => {
+//     console.log("gn2 / login", req.body);
+
+//     const {username, password} = req.body;
+//     if (username !== user.username || password !== user.password) {
+//     res.status(401).json({ message: "Not Authorized" });
+//     }
+//     res.status(200).json({message: "Login successful", menu: menu});
+// });
 
 
 // Feedback Form 
