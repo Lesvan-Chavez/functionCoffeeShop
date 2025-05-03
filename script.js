@@ -282,6 +282,17 @@ event.preventDefault();
 
 const data = Object.fromEntries(new FormData(form).entries());
 
+if (
+    !data.firstName.trim() ||
+    !data.lastName.trim()  ||
+    !data.email.trim()     ||
+    !data.comments.trim()      
+) {
+    error.innerText = "Please fill in First Name, Last Name, Email, and Comments.";
+    return;
+}
+
+
 submitFormData(data)
     .then(() => {
     console.log("Form data successfully sent!");
