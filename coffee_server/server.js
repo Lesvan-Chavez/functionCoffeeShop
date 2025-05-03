@@ -4,19 +4,6 @@ const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 const supabase = require('./db');
 
-const menu = [
-    {
-        name: "Americano",
-        price: 2.5,
-        type: "hot",
-    },
-    { name: "Latte", price: 3.0, type: "hot" },
-    { name: "Cappuccino", price: 3.5, type: "hot" },
-    { name: "Frozen Americano", price: 4.5, type: "cold" },
-    { name: "Frozen Latte", price: 2.5, type: "cold" },
-    { name: "Pup Cup", price: 0, type: "cold" },
-];
-
     // 4/26/25 Youtube Class video - Half way through the follow along
 
 const orderArray = [];
@@ -38,9 +25,15 @@ app.get("/", (req, res) => {
     res.send("Hello World");
 });
 
-app.get("/getMenu", (req, res) => {
-    console.log("gn2 / menu"); 
-    //rech out to the db to get the menu
+app.get("/getMenu", async (req, res) => { 
+    const {data: menu, error} = await supabase.from('menu').select();
+
+    if (error) {
+        console.error('error', error);
+        return res.status(500).json({ error: error.message});
+    }
+    console.log('menu', menu);
+    console.error('error', error)
     res.json(menu);
 });
 
@@ -64,24 +57,29 @@ app.post('/login', async (req, res) => {
     res.status(200).json({message: 'Success'})
 });
 
-// Original local host login authentecation 
-// const user = { username: "admin", password: "password123" };
-// app.post("/login", async (req, res) => {
-//     console.log("gn2 / login", req.body);
 
-//     const {username, password} = req.body;
-//     if (username !== user.username || password !== user.password) {
-//     res.status(401).json({ message: "Not Authorized" });
-//     }
-//     res.status(200).json({message: "Login successful", menu: menu});
-// });
-
-
-// Feedback Form 
-app.post("/submit", (req, res) => {
+//Contact us form 
+app.post("/submit", async (req, res) => {
     console.log("Feedback form submission:", req.body);
-
-    res.send("Thank you for your feedback!");
+    if (!req.body || req.body.length < 1) {
+        res.status(400).json({ message: "Error submitting contact form! Ensure all fieds are complete."})
+    }
+    const messageObj = req.body;
+    const { data, error } = await supabase
+    .from('contact_form_messages')
+    .insert([
+        {
+            first_name: messageObj.firstName,
+            last_name: messageObj.lastName,
+            email: messageObj.email,
+            comment: messageObj.comment,
+        }
+    ])
+    if (error) {
+        console.error('Form error', error)
+        return res.status(500).json({ error: error.message})
+    }
+    res.status(200).json({message: "Message Received!"})
 });
 
 

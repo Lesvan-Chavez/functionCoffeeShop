@@ -9,7 +9,7 @@ async function handleLogin(event) {
     const username = usernameElement.value;
     const passwordElement = document.getElementById('password');
     const password = passwordElement.value;
- 
+
     const response = await fetch('http://localhost:3000/login', 
     {
         method: "POST",
@@ -239,11 +239,6 @@ function createMenu(menu) {
     }
 }
 
-// function practiceGetRoute () {
-//     // console.log("I am in practiceGetRoute()");
-//     const response = fetch('http://localhost:3000');
-//     console.log('response', response);
-// };
 
 async function getMenuFromServer() {
     const responseMenu = await fetch("http://localhost:3000/getMenu");
@@ -266,7 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // Form Submission 
-const form = document.getElementById("feedbackForm");
+const form = document.getElementById("contact_form_messages");
 
 async function submitFormData(formData) {
 const responseForm = await fetch("http://localhost:3000/submit", {
@@ -282,7 +277,6 @@ if (!responseForm.ok) {
 return responseForm; 
 }
 
-// 2. Use that function in your event listener
 form.addEventListener("submit", (event) => {
 event.preventDefault();
 
