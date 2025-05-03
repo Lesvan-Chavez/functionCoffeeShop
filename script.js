@@ -262,3 +262,37 @@ document.addEventListener("DOMContentLoaded", function () {
     // practiceGetRoute();
     getMenuFromServer();
 });
+
+
+// Form Submission 
+const form = document.getElementById("feedbackForm");
+
+async function submitFormData(formData) {
+const responseForm = await fetch("http://localhost:3000/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+});
+
+if (!responseForm.ok) {
+    const text = await responseForm.text();
+    throw new Error(`Server error ${responseForm.status}: ${text}`);
+}
+return responseForm; 
+}
+
+// 2. Use that function in your event listener
+form.addEventListener("submit", (event) => {
+event.preventDefault();
+
+const data = Object.fromEntries(new FormData(form).entries());
+
+submitFormData(data)
+    .then(() => {
+    console.log("Form data successfully sent!");
+    })
+    .catch((err) => {
+    console.error("Error submitting form:", err);
+    });
+});
+
