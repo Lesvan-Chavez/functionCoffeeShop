@@ -5,35 +5,44 @@ let appliedDiscount = 0;
 // login function:
 async function handleLogin(event) {
     event.preventDefault();
-    const usernameElement = document.getElementById("username").value;
-    const passwordElement = document.getElementById("password").value;
-    console.log("username", username.value);
-    console.log("password", password.value);
+    const usernameElement = document.getElementById('username');
+    const username = usernameElement.value;
+    const passwordElement = document.getElementById('password');
+    const password = passwordElement.value;
+    
     const response = await fetch('http://localhost:3000/login', 
     {
         method: "POST",
         headers: {
         "Content-Type": "application/json" },
         body: JSON.stringify({
-        username: username.value,
-        password: password.value
+        username: username,
+        password: password
         })
     });
+    
+    if (!response.ok) {
+        alert('invalid credentials');
+    };
 
-
-    if (
-        user.username !== usernameElement ||
-        user.password !== passwordElement
-    ) {
-        alert(`User or Password not found`);
-        return;
-    } else {
-        loggedInUser = user;
-    }
+    let responseJson = await response.json();
+    console.log('responseJson', responseJson);
 
     let welcomeMessageElement = document.getElementById("welcome-message");
-    welcomeMessageElement.innerText = `Welcome ${loggedInUser.username}`;
-}
+    welcomeMessageElement.innerText = `Welcome ${username}`;
+};
+
+    // if (
+    //     user.username !== usernameElement ||
+    //     user.password !== passwordElement
+    // ) {
+    //     alert(`User or Password not found`);
+    //     return;
+    // } else {
+    //     loggedInUser = user;
+    // }
+
+
 
 // adding items to cart function
 
@@ -117,6 +126,9 @@ function removeFromCart(index) {
     cart.splice(index, 1);
     updateCart();
 }
+
+
+
 function checkout() {
     if (cart.length === 0) {
         alert("Your cart is empty!");
@@ -132,6 +144,8 @@ function checkout() {
     cart.length = 0;
     updateCart();
 }
+
+
 
 // increase or decrease item of the cart instead of completly removing
 

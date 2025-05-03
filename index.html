@@ -41,6 +41,29 @@
     <button onclick="applyPromoCode()">Apply Code</button>
     <p id="message"></p>
         </section>
+
+        <!--contact form -->
+        <form action="/submit" method="POST">
+        <div>
+            <label for="firstName"></label>
+            <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+        </div>
+        <div>
+            <label for="lastName"></label>
+            <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
+        </div>
+        <div class="full-width">
+            <label for="email"></label>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="full-width">
+            <label for="comments"></label>
+            <textarea id="comments" name="comments" rows="5" placeholder="Leave Your Feedback!"></textarea>
+        </div>
+            <button type="submit">Submit</button>
+        </form>
+    
+    
     </main>
     <script src="script.js"></script>
 </body>
