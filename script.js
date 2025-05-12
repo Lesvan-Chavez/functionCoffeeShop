@@ -130,21 +130,34 @@ function removeFromCart(index) {
 
 
 
-function checkout() {
+async function checkout() {
     if (cart.length === 0) {
         alert("Your cart is empty!");
         return;
     }
-    alert(
-        `Thank you for your purchase, ${
-            loggedInUser && loggedInUser.username
-                ? loggedInUser.username
-                : "Human"
-        }!`
-    );
+        console.log('Cart Checkout Check', cart);
+
+        const response = await fetch('http://localhost:3000/checkout', 
+            {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json" },
+                body: JSON.stringify(cart)
+            });
+            
+            let responseJsonCart = await response.json();
+            
+            console.log("responseJsonCart", responseJsonCart)
+
+            if (!response.ok) {
+                alert(responseJsonCart.message);
+            };
+        
+            alert(`${responseJsonCart.message}. Confirmation Number: ${responseJsonCart.confirmationNumber}`);
     cart.length = 0;
     updateCart();
-}
+};
+
 
 
 

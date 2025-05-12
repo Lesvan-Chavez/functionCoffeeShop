@@ -4,14 +4,6 @@ const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 const supabase = require('./db');
 
-    // 4/26/25 Youtube Class video - Half way through the follow along
-
-const orderArray = [];
-
-
-
-
-
 // ROUTES
 
 const app = express();
@@ -25,6 +17,8 @@ app.get("/", (req, res) => {
     res.send("Hello World");
 });
 
+
+// menu from SupaBase
 app.get("/getMenu", async (req, res) => { 
     const {data: menu, error} = await supabase.from('menu').select();
 
@@ -36,6 +30,25 @@ app.get("/getMenu", async (req, res) => {
     console.error('error', error)
     res.json(menu);
 });
+
+// ordering: 
+const orderArray = [];
+
+app.post('/checkout', (req, res) => {
+    console.log('Server checkout', req.body)
+if(!req.body || req.body.length < 1) {
+    res.status(400).json({ message: "At least one item required" });
+}
+    const order = req.body;
+    orderArray.push(order);
+    console.log('Order', orderArray);
+
+    const confirmationNumber = "123456789ABC";
+
+    res.status(200).json({ message: "Order Recieved!", confirmationNumber: confirmationNumber });
+
+});
+
 
 // for the form
 const path = require("path");   
